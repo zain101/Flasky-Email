@@ -1,4 +1,4 @@
-__author__ = 'zainul'
+'''__author__ = 'zainul'
 import os
 from threading import Thread
 from flask import Flask, render_template, session, redirect, url_for, flash
@@ -16,14 +16,14 @@ from flask.ext.mail import Mail, Message
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
-#.........................................................Config for database
+#  .........................................................Config for database
 
 app.config['SECRET_KEY'] = 'hard to guess string'
 app.config['SQLALCHEMY_DATABASE_URI'] =\
     'sqlite:///' + os.path.join(basedir, 'data.sqlite')
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 
-#............................................................config for email
+# ............................................................config for email
 app.config['MAIL_SERVER']= 'smtp.gmail.com'
 app.config['MAIL_PORT']=  465
 app.config['MAIL_USE_TLS']= False
@@ -128,3 +128,4 @@ if __name__ == '__main__':
     #db.create_all()
     manager.run()
 
+'''

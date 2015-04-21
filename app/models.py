@@ -1,5 +1,5 @@
 __author__ = 'zainul'
-from . import  db
+from . import db
 
 '''
 This module contains Models the database...

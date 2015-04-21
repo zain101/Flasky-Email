@@ -6,7 +6,7 @@ from flask.ext.bootstrap import Bootstrap
 from flask.ext.mail import Mail
 from flask.ext.moment import Moment
 from flask.ext.sqlalchemy import SQLAlchemy
-from config import  config
+from config import config
 
 '''
 This constructor imports most Flask  extension currently in use, without intializing them with any application instance...
@@ -18,11 +18,11 @@ db = SQLAlchemy()
 
 '''this is an application factory which takes as an argument the application config to be used...'''
 def create_app(config_name):
-    #config_name = 'default'
+    # config_name = 'default'
     app = Flask(__name__)
     print config_name
     '''first config is module and second one is dict
-    This(config['config_name') dict recturn a class-name as class-OBJ{obj created by from_object} and its variable... '''
+    This(config['config_name') dict return a class-name as class-OBJ{obj created by from_object} and its variable... '''
 
     app.config.from_object(config[config_name])
     # class-name.method_name  b'coz init_app is a @staticmethod

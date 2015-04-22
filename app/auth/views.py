@@ -3,11 +3,11 @@ __author__ = 'zainul'
 from flask import render_template, redirect, request, url_for, flash
 from flask.ext.login import login_user, logout_user, login_required
 from . import auth
-from ..models import User, db
+from ..models import User, db, Permission
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm, PasswordResetForm, PasswordResetRequestForm, ChangeEmailForm
 from ..email import send_email
 from flask.ext.login import current_user
-
+from ..decorators import admin_requird, permission_required
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -165,3 +165,18 @@ def change_email(token):
     else:
         flash('Invalid request.')
     return redirect(url_for('main.index'))
+
+
+@auth.route('/admin')
+@login_required
+@admin_requird
+def for_admin_only():
+    return "For Administrators!"
+
+
+@auth.route('/moderator')
+@login_required
+@permission_required(Permission.MODERATE_COMMENTS)
+def for_moderators_only():
+    return "For Comment moderators!"
+

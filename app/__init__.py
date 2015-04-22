@@ -7,7 +7,7 @@ from flask.ext.mail import Mail
 from flask.ext.moment import Moment
 from flask.ext.sqlalchemy import SQLAlchemy
 from config import config
-
+from flask.ext.login import LoginManager
 '''
 This constructor imports most Flask  extension currently in use, without intializing them with any application instance...
 '''
@@ -15,6 +15,9 @@ bootstrap = Bootstrap()
 mail = Mail()
 moment = Moment()
 db = SQLAlchemy()
+login_manager = LoginManager()
+login_manager.session_protection = 'strong'
+login_manager.login_view = 'auth.login'
 
 '''this is an application factory which takes as an argument the application config to be used...'''
 def create_app(config_name):
@@ -34,6 +37,7 @@ def create_app(config_name):
     mail.init_app(app)
     moment.init_app(app)
     db.init_app(app)
+    login_manager.init_app(app)
     xx = raw_input("inside create app")
 
     # importing blueprint
@@ -42,5 +46,10 @@ def create_app(config_name):
     xx = raw_input("inside create app impoted blueprint" )
     app.register_blueprint(main_blueprint)
     xx = raw_input("inside create app after registration" )
+
+    ''' Attaching auth blueprint to the application factory'''
+    from .auth import auth as auth_blueprint
+    app.register_blueprint(auth_blueprint, url_prefix='/auth')
+
     return app
 

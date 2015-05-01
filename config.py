@@ -20,6 +20,8 @@ class Config:
     MAIL_PASSWORD= os.environ.get('MAIL_PASSWORD')
     FLASKY_POST_PER_PAGE = 5
     FLASK_FOLLOWERS_PER_PAGE = 10
+    FLASK_COMMENTS_PER_PAGE = 10
+
 
     @staticmethod
     def init_app(app):  # configuration specific initialization can be performed

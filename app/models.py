@@ -31,6 +31,8 @@ class Post(UserMixin, db.Model):
     body_html = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    views = db.Column(db.Integer)
+    comments = db.relationship('Comment', backref='post', lazy='dynamic')
 
     @staticmethod
     def generate_fake(count=100):
@@ -56,6 +58,17 @@ class Post(UserMixin, db.Model):
                         'h1', 'h2', 'h3', 'p', 'img', 'src', 'alt', 'iframe', 'href' ]
         target.body_html = markdown(value, output_format='html')
 
+
+db.event.listen(Post.body, 'set', Post.on_change_body)
+
+
+
+'''
+User model is to Model many to many relationship between follower and followed.
+one-to-many relationship from both side, (self-refrencial kind off.)is created to make a  M-M relationship
+SQLAlchemy M-M default relations is not used, coz it does not give any customization option like we have in THIS as TIMESTAMP.
+'''
+
 class Follow(db.Model):
     __tablename__ = 'follows'
     follower_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
@@ -63,8 +76,23 @@ class Follow(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
 
+class Comment(db.Model):
+    __tablename__ = 'comments'
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.Text)
+    body_html = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    disabled = db.Column(db.Boolean)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
 
-db.event.listen(Post.body, 'set', Post.on_change_body)
+    @staticmethod
+    def on_changed_body(target, value, oldvalue, initiator):
+        target.body_html = markdown(value, output_format='html')
+
+
+db.event.listen(Comment.body, 'set', Comment.on_changed_body)
+
 
 class Role(db.Model):
     __tablename__ = 'roles'
@@ -111,6 +139,7 @@ class User(UserMixin, db.Model):
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
     avatar_hash = db.Column(db.String(32))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+    comments = db.relationship('Comment', backref='author', lazy='dynamic')
     '''
     These are the people who follow me
     '''
@@ -309,17 +338,9 @@ class AnonymousUser(AnonymousUserMixin):
 login_manager.anonymous_user = AnonymousUser
 
 
-
-
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-'''
-User model is to Model many to many relationship between follower and followed.
-one-to-many relationship from both side, (self-refrencial kind off.)is created to make a  M-M relationship
-SQLAlchemy M-M default relations is not used, coz it does not give any customization option like we have in THIS as TIMESTAMP.
-'''
 

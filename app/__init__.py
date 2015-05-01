@@ -8,6 +8,7 @@ from flask.ext.moment import Moment
 from flask.ext.sqlalchemy import SQLAlchemy
 from config import config
 from flask.ext.login import LoginManager
+from flask.ext.pagedown import PageDown
 '''
 This constructor imports most Flask  extension currently in use, without intializing them with any application instance...
 '''
@@ -15,6 +16,7 @@ bootstrap = Bootstrap()
 mail = Mail()
 moment = Moment()
 db = SQLAlchemy()
+pagedown = PageDown()
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
@@ -38,6 +40,7 @@ def create_app(config_name):
     moment.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
+    pagedown.init_app(app)
     xx = raw_input("inside create app")
 
     # importing blueprint

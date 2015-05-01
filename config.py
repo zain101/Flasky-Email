@@ -18,15 +18,19 @@ class Config:
     MAIL_USE_SSL= True
     MAIL_USERNAME= os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD= os.environ.get('MAIL_PASSWORD')
+    FLASKY_POST_PER_PAGE = 5
+    FLASK_FOLLOWERS_PER_PAGE = 10
 
     @staticmethod
     def init_app(app):  # configuration specific initialization can be performed
         pass
 
+
 class DevelopmentConfig(Config):
     DEBUG= True
     SQLALCHEMY_DATABASE_URI =os.environ.get('DEV_DATABASE_URL') or \
     'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+
 
 class TestingConfig(Config):
     TESTING= True

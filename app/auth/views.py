@@ -7,7 +7,7 @@ from ..models import User, db, Permission
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm, PasswordResetForm, PasswordResetRequestForm, ChangeEmailForm
 from ..email import send_email
 from flask.ext.login import current_user
-from ..decorators import admin_requird, permission_required
+from ..decorators import admin_required, permission_required
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -42,7 +42,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()
-        send_email(user.email, 'Damru: Confirm your account.', 'auth/email/confirm', user=user, token=token)
+        send_email(user.email, 'CollegeConnect: Confirm your account.', 'auth/email/confirm', user=user, token=token)
         flash('A confirmation email has been sent to you. ')
         return redirect(url_for('main.index'))
     return render_template('auth/register.html', form=form)
@@ -60,10 +60,17 @@ def confirm(token):
     return redirect(url_for('main.index'))
 
 
+'''
+This is a request hook which get executed every time a user request is received
+'''
+
+
 @auth.before_app_request
 def before_request():
-    if current_user.is_authenticated() and not current_user.confirmed and request.endpoint[:5] != 'auth.':
-        return redirect(url_for('auth.unconfirmed'))
+    if current_user.is_authenticated():
+        current_user.ping()
+        if not current_user.confirmed and request.endpoint[:5] != 'auth.':
+            return redirect(url_for('auth.unconfirmed'))
 '''
 1) User should be authenticated.
 2) User should not be confirmed.
@@ -121,6 +128,7 @@ def password_reset_request():
         return redirect(url_for('auth.login'))
     return render_template('auth/reset_password.html', form=form)
 
+
 @auth.route('/reset/<token>', methods=['GET', 'POST'])
 def password_reset(token):
     if not current_user.is_anonymous():
@@ -169,7 +177,7 @@ def change_email(token):
 
 @auth.route('/admin')
 @login_required
-@admin_requird
+@admin_required
 def for_admin_only():
     return "For Administrators!"
 

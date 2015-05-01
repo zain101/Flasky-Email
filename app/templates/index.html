@@ -1,32 +1,36 @@
 {% extends "base.html" %}
 {%  import 'bootstrap/wtf.html'  as wtf %}
+{% import '_macros.html' as macros %}
+
 {% block title %}Flasky{% endblock %}
 
-{% block styles  %}
-{{ super() }}
-    <style>
-    .inline { float:left; }
-    .clearBoth { clear:both; }
-    .inlineR {float: right;}
-    </style>
-{% endblock %}
 
 {% block page_content %}
-    <div class="page-header">
-        <h1>Welcome {% if current_user.is_authenticated() %} {{ current_user.username }} {% else %} Stranger {% endif %}!</h1>
-    </div>
-    <div class="page-header">
-        {% if not known %}
-            <p><i>Pleased to meet you.</i></p>
-        {% else %}
-            <p><i>Happy to see you again.</i></p>
-        {% endif %}
-    </div>
-     <div class="inline">The local date and time is {{ moment(current_time).format('dddd MMMM Do YYYY, hh:mm:ss a') }}.</div>
-    <div  class="inline" style="float: right">...That was {{ moment(current_time).fromNow(refresh=True) }}.</div>
-    <br /><br />
 
+    <div class="page-header" >
+        <h1>Hello, {% if current_user.is_authenticated() %}{{ current_user.username }}{% else %}Stranger{% endif %}!</h1>
+    </div>
+    {% if current_user.can(Permission.WRITE_ARTICLE) %}
+        <div class="page-header">
+            {{ wtf.quick_form(form) }}
+        </div>
+        <div class="post-tabs">
+            <ul class="nav nav-tabs">
+                <li{% if not show_followed %} class="active"{% endif %}><a href="{{ url_for('.show_all') }}">All</a></li>
+                {% if current_user.is_authenticated() %}
+                   <li{% if show_followed %} class="active"{% endif %}><a href="{{ url_for('.show_followed') }}">Followers</a></li>
+                {% endif %}
+            </ul>
+             {% include '_posts.html' %}
+        </div>
+     <div class="pagination" >
+         {{ macros.pagination_widget(pagination, '.index') }}
+    </div>
+    {% endif %}
 
-<div class="page-header">{{ wtf.quick_form(form) }}</div>
 {% endblock %}
 
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

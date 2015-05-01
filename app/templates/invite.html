@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{%  import 'bootstrap/wtf.html'  as wtf %}
+{% block title %}Flasky-Invite{% endblock %}
+
+{% block styles  %}
+{{ super() }}
+    <style>
+    .inline { float:left; }
+    .clearBoth { clear:both; }
+    .inlineR {float: right;}
+    </style>
+{% endblock %}
+
+{% block page_content %}
+    <div class="page-header">
+        <h1>Welcome {% if current_user.is_authenticated() %} {{ current_user.username }} {% else %} Stranger {% endif %}!</h1>
+    </div>
+    <div class="page-header">
+        {% if not known %}
+            <p><i>Pleased to meet you.</i></p>
+        {% else %}
+            <p><i>Happy to see you again.</i></p>
+        {% endif %}
+
+    </div>
+     <div class="inline">The local date and time is {{ moment(current_time).format('dddd MMMM Do YYYY, hh:mm:ss a') }}.</div>
+    <div  class="inline" style="float: right">...That was {{ moment(current_time).fromNow(refresh=True) }}.</div>
+    <br /><br />
+
+  <div class="col-md-5">
+            <h3>Invite your friend.</h3>
+<div class="page-header">{{ wtf.quick_form(form) }}</div>
+{% endblock %}
+

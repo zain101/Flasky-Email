@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+
+{% block title %}Flasky-zain{% endblock %}
+
+{% block page_content %}
+    {% for user in users %}
+        <div class="page-header" style="float: left; padding-right: 5%; min-height: 10px;  margin: 12px 0px 0px 0px; ">
+        <img class="img-rounded profile-thumbnail " style=" margin: 0px 0px 0px 0px;" src="{{user.gravatar(size=60)  }}" />
+        <div class="profile-header" style=" margin: 12px 12px 12px 12px;">
+        <a href="{{ url_for('main.user', username=user.username) }}"><h3 style=" margin: 20px 20px 20px 50px;">{{ user.username }}</h3></a>
+        {% if user.name or user.location %}
+        <p style="font-size: small; margin: 0px 0px 0px 0px;">
+            {% if user.name %} {{ user.name }} {% endif %}
+            {% if user.location %}
+                From <a href="http://maps.google.com/?q={{ user.location }}">{{ user.location }}</a>
+            {% endif %}
+        </p>
+        {% endif %}
+        {% if current_user.is_administrator() %}
+            <p style=" margin: 0px 0px 0px 0px;"><a href="mailto: {{ user.email }}">{{ user.email }}</a></p>
+        {% endif %}
+       <!-- {% if user.about_me %}
+            <p> {{ user.about_me }}</p>
+        {% endif %}-->
+        <p style=" margin: 0px 0px 0px 0px;">
+            Member since {{ moment(user.member_since).format('L')}}.<br />
+            Last seen {{ moment(user.last_seen).fromNow()}}.
+            <p style=" margin: 0px 0px 0px 0px;">{{ user.posts.count() }} blog posts.</p>
+        </p>
+
+        <p style=" margin: 0px 0px 0px 0px;">
+                 {% if user == current_user %}
+                    <a class="btn btn-default" href="{{ url_for('main.edit_profile') }}">Edit Profile</a>
+                {% endif %}
+                {% if current_user.is_administrator() %}
+                    <a class="btn btn-danger" href="{{ url_for('main.edit_profile_admin', id=user.id ) }}">Edit Profile [Admin]</a>
+                {% endif %}
+        </p>
+
+        </div>
+        </div>
+    {% endfor %}
+{% endblock %}

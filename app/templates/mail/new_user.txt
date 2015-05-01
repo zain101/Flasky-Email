@@ -1,8 +1,6 @@
 
-hello, 
+hey,
 
-	User {{ user.username }} has joined. 
-	its a test mail.
-	
-	please find the attachment.
+	I its me  {{ user }} I just  joined CollegeConnect. I invite you to join too.
+	{{message}}
 	

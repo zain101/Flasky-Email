@@ -67,6 +67,7 @@ flake8==2.1.0
 flask-mongoengine==0.7.0
 flup==1.0.2
 geopandas==0.1.0.dev
+gunicorn==19.3.0
 html5lib==0.999
 httplib2==0.8
 ipython==2.4.1
@@ -145,3 +146,4 @@ xdiagnose==3.6.3build2
 youtube-dl==2015.03.09
 zenmap==6.46
 zope.interface==4.0.5
+psycopg2==2.5.1

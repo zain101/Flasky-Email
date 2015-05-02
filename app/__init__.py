@@ -41,18 +41,23 @@ def create_app(config_name):
     db.init_app(app)
     login_manager.init_app(app)
     pagedown.init_app(app)
-    xx = raw_input("inside create app")
+    #xx = raw_input("inside create app")
 
     # importing blueprint
     from .main import main as main_blueprint
     print main_blueprint.name
-    xx = raw_input("inside create app impoted blueprint" )
+    #xx = raw_input("inside create app impoted blueprint" )
     app.register_blueprint(main_blueprint)
-    xx = raw_input("inside create app after registration" )
+    #xx = raw_input("inside create app after registration" )
 
     ''' Attaching auth blueprint to the application factory'''
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
+
+
+    if not app.debug and not app.testing and not app.config['SSL_DISABLE']:
+        from flask.ext.sslify import SSLify
+        sslify = SSLify(app)
 
     return app
 

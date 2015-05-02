@@ -146,4 +146,3 @@ xdiagnose==3.6.3build2
 youtube-dl==2015.03.09
 zenmap==6.46
 zope.interface==4.0.5
-psycopg2==2.5.1

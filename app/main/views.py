@@ -19,7 +19,7 @@ def index():
         page_count.count=1
     else:
         page_count.count = int(page_count.count) +1
-
+    flash("Site has experienced a breakdown, inconvenience is regretted! ")
     if current_user.can(Permission.WRITE_ARTICLE) and form.validate_on_submit():
         post = Post(body=form.body.data, author=current_user._get_current_object())
         db.session.add(post)

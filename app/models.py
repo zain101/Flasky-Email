@@ -344,3 +344,8 @@ def load_user(user_id):
 
 
 
+class PageCount(db.Model):
+    __tablename__ = 'pagecounts'
+    id = db.Column(db.Integer, primary_key=True)
+    page = db.Column(db.String)
+    count = db.Column(db.BigInteger)

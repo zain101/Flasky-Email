@@ -3,18 +3,163 @@
 {% import '_macros.html' as macros %}
 
 {% block title %}Flasky{% endblock %}
+{% block head %}
+        {{ super() }}
+        <script src="../static/js/jquery.js"></script>
+        <script src="../static/js/bootstrap.min.js"></script>
+        <link href="../static/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link href="../static/css/modern-business.css" rel="stylesheet">
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+        <!-- Bootstrap Core JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+        <script>
+
+            $(function(){
+                $('.carousel').carousel({ interval: 5000});
+            });
+        </script>
+{% endblock %}
+
+{% block navbar %}
+    {{ super() }}
+
+
+
+             <!-- Header Carousel -->
+    <header id="myCarousel" class="carousel slide">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+        </ol>
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+            <div class="item active">
+                <div class="fill" > <img src="https://cdn.explara.com/logolg20150416093141.png"  width=1200px height= 300px></div>
+                <div class="carousel-caption">
+                    <h2></h2>
+                </div>
+            </div>
+            <div class="item">
+                <div class="fill" ><img src="http://jamie-wong.com/images/12-08-22/flask-jinja2-gae.png"  width=1200px height= 300px></div>
+                <div class="carousel-caption">
+                    <h2></h2>
+                </div>
+            </div>
+            <div class="item">
+                <div class="fill" ><img src="http://flask.pocoo.org/static/logo/flask.png"  width=1200px height= 300px></div>
+                <div class="carousel-caption">
+                    <h2></h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+            <span class="icon-prev"></span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" data-slide="next">
+            <span class="icon-next"></span>
+        </a>
+    </header>
+
+{% endblock %}
 
 
 {% block page_content %}
-
     <div class="page-header" >
         <h1>Hello, {% if current_user.is_authenticated() %}{{ current_user.username }}{% else %}Stranger{% endif %}!</h1>
+        <div class="page-header" style="float: right;"> <span class="label label-danger">Hits | {{ count }}</span></div>
     </div>
+    {% if not current_user.is_authenticated() %}
+        <div class="container">
+                    <!-- Features Section -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">A place to learn, document, teach, share and evolve.</h2>
+                </div>
+                <div class="col-md-6">
+                    <p>The club is for passionate programmers who wants to teach and learn.:</p>
+                    <ul>
+                        <li><strong>Register your self.</strong></li>
+                        <li>Invite friends and build community.</li>
+                        <li>Write articles and share.</li>
+                        <li>Have a discussion in comments.</li>
+                        <li>Share your knowlegde and Inspire.</li>
+                        <li>let's learn together.</li>
+                    </ul>
+                    <p>
+                        The website offers a platform to share your ideas with your friends, Invite them to have a discussion. This help to create a teaching learning
+                        environment in a simplistic way, So have fun.
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <img class="img-responsive" src="{{ url_for('static', filename='pc.jpg') }}"  alt="ProgrammersClub">
+                </div>
+            </div>
+
+              <!-- Marketing Icons Section -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">
+                    Allow us to share!
+                </h1>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4><i class="fa fa-fw fa-check"></i>Python</h4>
+                    </div>
+                    <div class="panel-body">
+                        <p>This website uses Python programming language as a server side scripting, All the business logic is coded in pure python. As a experience of this python is a robust launguage for server side scripting.  </p>
+                        <p>Flask is user as framework for communicating with HTML. </p>
+                        <a href="https://www.python.org/" target="_blank"class="btn btn-default">Learn More</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4><i class="fa fa-fw fa-gift"></i> Flask</h4>
+                    </div>
+                    <div class="panel-body">
+                        <p>Flask is a microframework for Python based on Werkzeug, Jinja 2 and good intentions. And before you ask: It's BSD licensed!</p>
+                            <p>Flask depends on two external libraries: the Jinja2 template engine and the Werkzeug WSGI toolkit. </p>
+                            <p></p>
+                        <a href="http://flask.pocoo.org/docs/0.10/" target="_blank" class="btn btn-default">Learn More</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4><i class="fa fa-fw fa-compass"></i> Free & OpenSource</h4>
+                    </div>
+                    <div class="panel-body">
+                        <p>Yes, This website is free to use and advertise would never bother you</p>
+                        <p>You would have a pleasent experience using it as its having very easy design </p>
+                        <p>You could access the source code form the github repo, don't forget to share.</p>
+                        <a href="https://github.com/zain101/Flasky-Email" target="_blank" class="btn btn-default">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
     {% if current_user.can(Permission.WRITE_ARTICLE) %}
         <div class="page-header">
             {{ wtf.quick_form(form) }}
         </div>
-        <div class="post-tabs">
+
+    {% endif %}
+    <div class="post-tabs">
             <ul class="nav nav-tabs">
                 <li{% if not show_followed %} class="active"{% endif %}><a href="{{ url_for('.show_all') }}">All</a></li>
                 {% if current_user.is_authenticated() %}
@@ -22,15 +167,19 @@
                 {% endif %}
             </ul>
              {% include '_posts.html' %}
-        </div>
+    </div>
      <div class="pagination" >
          {{ macros.pagination_widget(pagination, '.index') }}
     </div>
-    {% endif %}
+
+
 
 {% endblock %}
 
+
+
 {% block scripts %}
-{{ super() }}
-{{ pagedown.include_pagedown() }}
+    {{ super() }}
+    {{ pagedown.include_pagedown() }}
+
 {% endblock %}

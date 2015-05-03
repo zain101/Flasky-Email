@@ -1,7 +1,7 @@
 
 from flask import render_template, session, redirect, url_for, current_app, flash, request, make_response
 from .. import db
-from ..models import User, Permission, Role, Post, Follow, Comment
+from ..models import User, Permission, Role, Post, Follow, Comment, PageCount
 from ..email import send_email
 from . import main
 from .forms import NameForm, EditProfileForm, EditProfileAdminForm, PostForm, CommentForm
@@ -14,6 +14,12 @@ from flask.ext.login import login_required, abort, current_user
 def index():
     show_followed = False
     form = PostForm()
+    page_count = PageCount.query.get_or_404(1)
+    if  page_count.count is None:
+        page_count.count=1
+    else:
+        page_count.count = int(page_count.count) +1
+
     if current_user.can(Permission.WRITE_ARTICLE) and form.validate_on_submit():
         post = Post(body=form.body.data, author=current_user._get_current_object())
         db.session.add(post)
@@ -28,7 +34,7 @@ def index():
     page = request.args.get('page', 1, type=int)
     pagination = query.order_by(Post.timestamp.desc()).paginate(page, per_page=current_app.config['FLASKY_POST_PER_PAGE'], error_out=False)
     posts = pagination.items
-    return render_template('index.html', posts=posts, form=form, pagination=pagination, show_followed=show_followed)
+    return render_template('index.html', posts=posts, form=form, pagination=pagination, show_followed=show_followed, count=page_count.count)
 
 
 @main.route('/invite', methods=['GET', 'POST'])
@@ -284,3 +290,8 @@ def moderate_disable(id):
     comment.disabled = True
     db.session.add(comment)
     return redirect(url_for('.moderate', page=request.args.get('page', 1, type=int)))
+
+
+@main.route('/test')
+def testing():
+    return render_template('test.html')

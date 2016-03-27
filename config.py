@@ -16,8 +16,8 @@ class Config:
     MAIL_PORT = 465
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
-    MAIL_USERNAME = os.environ.get('MAIL_USERNAME') or 'eyantra2269@gmail.com'
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD') or 'pass4eyantra'
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME') or ''
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD') or ''
     FLASKY_POST_PER_PAGE = 5
     FLASK_FOLLOWERS_PER_PAGE = 10
     FLASK_COMMENTS_PER_PAGE = 10
